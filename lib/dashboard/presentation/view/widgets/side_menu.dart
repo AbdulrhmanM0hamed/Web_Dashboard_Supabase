@@ -61,27 +61,36 @@ class SideMenu extends StatelessWidget {
                   isSelected: selectedIndex == 1,
                   onItemSelected: onItemSelected,
                 ),
-                MenuItemWidget(
+                    MenuItemWidget(
                   index: 2,
-                  title: 'التصنيفات',
-                  icon: Icons.category_outlined,
+                  title: 'العروض الخاصة',
+                  icon: Icons.local_offer_outlined,
                   isSelected: selectedIndex == 2,
                   onItemSelected: onItemSelected,
                 ),
+                
                 MenuItemWidget(
                   index: 3,
-                  title: 'المستخدمين',
-                  icon: Icons.people_outline,
+                  title: 'التصنيفات',
+                  icon: Icons.category_outlined,
                   isSelected: selectedIndex == 3,
                   onItemSelected: onItemSelected,
                 ),
                 MenuItemWidget(
                   index: 4,
-                  title: 'الطلبات',
-                  icon: Icons.shopping_cart_outlined,
+                  title: 'المستخدمين',
+                  icon: Icons.people_outline,
                   isSelected: selectedIndex == 4,
                   onItemSelected: onItemSelected,
                 ),
+                MenuItemWidget(
+                  index: 5,
+                  title: 'الطلبات',
+                  icon: Icons.shopping_cart_outlined,
+                  isSelected: selectedIndex == 5,
+                  onItemSelected: onItemSelected,
+                ),
+             
               ],
             ),
           ),
@@ -102,6 +111,8 @@ class SideMenu extends StatelessWidget {
               // Handle settings
             },
           ),
+         
+          
         ],
       ),
     );

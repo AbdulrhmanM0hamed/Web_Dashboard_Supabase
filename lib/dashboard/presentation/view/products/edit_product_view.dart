@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/services/image_picker_service.dart';
 import 'package:supabase_dashboard/dashboard/data/models/product_model.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/products/products_cubit.dart';
-
 
 class EditProductView extends StatefulWidget {
   final ProductModel product;
@@ -295,10 +295,14 @@ class _EditProductViewState extends State<EditProductView> {
             ],
             const SizedBox(height: 32),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
               onPressed: _isLoading ? null : _submitForm,
               child: _isLoading
                   ? const CircularProgressIndicator()
-                  : const Text('حفظ التغييرات'),
+                  : const Text('حفظ التغييرات' , style: TextStyle(color: Colors.white),),
             ),
           ],
         ),

@@ -17,31 +17,31 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  // Widget _buildDashboardCard(
-  //   BuildContext context, {
-  //   required IconData icon,
-  //   required String title,
-  //   required VoidCallback onTap,
-  // }) {
-  //   return Card(
-  //     elevation: 4,
-  //     child: InkWell(
-  //       onTap: onTap,
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Icon(icon, size: 48),
-  //           const SizedBox(height: 8),
-  //           Text(
-  //             title,
-  //             style: Theme.of(context).textTheme.titleLarge,
-  //             textAlign: TextAlign.center,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildDashboardCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 4,
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 48),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 // Note: DashboardViewBody is not defined in the provided code, 

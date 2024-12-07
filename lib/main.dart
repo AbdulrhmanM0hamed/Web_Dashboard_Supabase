@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/categories/categories_view.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/dashboard_view.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/products/products_view.dart';
+import 'package:supabase_dashboard/dashboard/presentation/view/special_offers/special_offers_view.dart'; // Added import
+import 'package:supabase_dashboard/dashboard/presentation/view_model/special_offers/special_offers_cubit.dart';
 import 'package:supabase_dashboard/generated/l10n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 void main() async {
   await Supabase.initialize(
@@ -39,8 +41,12 @@ class MyApp extends StatelessWidget {
         '/': (context) => const DashboardView(),
         '/products': (context) => const ProductsView(),
         '/categories': (context) => const CategoriesView(),
+        '/special-offers': (context) => BlocProvider(
+              create: (context) => SpecialOffersCubit(),
+              child: const SpecialOffersView(),
+            )
       },
-     // home: const DashboardView(),
+      // home: const DashboardView(),
     );
   }
 }

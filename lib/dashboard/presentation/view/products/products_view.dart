@@ -221,7 +221,7 @@ class _ProductsViewState extends State<ProductsView> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child:  Image.network(
-                        product.imageUrl,
+                        product.imageUrl!,
                         width: 120,
                         height: 120,
                         fit: BoxFit.contain,
@@ -324,7 +324,7 @@ class _ProductsViewState extends State<ProductsView> {
                                           onPressed: () async {
                                             Navigator.pop(context);
                                             try {
-                                              await _productsCubit.deleteProduct(product.id);
+                                              await _productsCubit.deleteProduct(product.id!);
                                             } catch (e) {
                                               if (!context.mounted) return;
                                               ScaffoldMessenger.of(context).showSnackBar(

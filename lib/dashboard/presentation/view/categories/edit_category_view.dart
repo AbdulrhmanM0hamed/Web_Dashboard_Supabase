@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/services/image_picker_service.dart';
 import 'package:supabase_dashboard/dashboard/data/models/category_model.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/categories/categories_cubit.dart';
-
 
 class EditCategoryView extends StatefulWidget {
   final CategoryModel category;
@@ -190,7 +190,7 @@ class _EditCategoryViewState extends State<EditCategoryView> {
                   return ElevatedButton(
                     onPressed: state is CategoriesLoading ? null : _submitForm,
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: TColors.primary,
                     ),
                     child: state is CategoriesLoading
                         ? const CircularProgressIndicator()

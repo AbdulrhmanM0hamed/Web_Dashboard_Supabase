@@ -5,71 +5,67 @@ class ProductModel extends Equatable {
   final String name;
   final String description;
   final double price;
-  final int stock;
+  final String? imageUrl;
   final String categoryId;
-  final String imageUrl;
-  final bool isAvailable;
   final bool hasDiscount;
   final int? discountPercentage;
   final double? discountPrice;
   final int soldCount;
+  final bool isAvailable;
+  final int stock;
 
   const ProductModel({
     this.id,
     required this.name,
     required this.description,
     required this.price,
-    required this.stock,
+    this.imageUrl,
     required this.categoryId,
-    required this.imageUrl,
-    required this.isAvailable,
     required this.hasDiscount,
     this.discountPercentage,
     this.discountPrice,
     this.soldCount = 0,
+    required this.isAvailable,
+    required this.stock,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id']?.toString(),
-      name: json['name']?.toString() ?? '',
-      description: json['description']?.toString() ?? '',
-      price: (json['price'] is int)
-          ? (json['price'] as int).toDouble()
-          : double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
-      stock: int.tryParse(json['stock']?.toString() ?? '0') ?? 0,
-      categoryId: json['category_id']?.toString() ?? '',
-      imageUrl: json['image_url']?.toString() ?? '',
-      isAvailable: json['is_available'] as bool? ?? true,
-      hasDiscount: json['has_discount'] as bool? ?? false,
+      id: json['id'],
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      price: double.tryParse(json['price']?.toString() ?? '0') ?? 0,
+      imageUrl: json['image_url'],
+      categoryId: json['category_id'] ?? '',
+      hasDiscount: json['has_discount'] ?? false,
       discountPercentage: int.tryParse(json['discount_percentage']?.toString() ?? '0'),
-      discountPrice: (json['discount_price'] is int)
-          ? (json['discount_price'] as int).toDouble()
-          : double.tryParse(json['discount_price']?.toString() ?? '0'),
+      discountPrice: double.tryParse(json['discount_price']?.toString() ?? '0'),
       soldCount: int.tryParse(json['sold_count']?.toString() ?? '0') ?? 0,
+      isAvailable: json['is_available'] ?? true,
+      stock: int.tryParse(json['stock']?.toString() ?? '0') ?? 0,
     );
   }
 
   Map<String, dynamic> toJson({bool forCreation = false}) {
-    final json = {
+    final Map<String, dynamic> data = {
       'name': name,
       'description': description,
       'price': price,
-      'stock': stock,
-      'category_id': categoryId,
       'image_url': imageUrl,
-      'is_available': isAvailable,
+      'category_id': categoryId,
       'has_discount': hasDiscount,
       'discount_percentage': discountPercentage,
       'discount_price': discountPrice,
       'sold_count': soldCount,
+      'is_available': isAvailable,
+      'stock': stock,
     };
 
     if (!forCreation && id != null) {
-      json['id'] = id;
+      data['id'] = id;
     }
 
-    return json;
+    return data;
   }
 
   @override
@@ -78,14 +74,14 @@ class ProductModel extends Equatable {
         name,
         description,
         price,
-        stock,
-        categoryId,
         imageUrl,
-        isAvailable,
+        categoryId,
         hasDiscount,
         discountPercentage,
         discountPrice,
         soldCount,
+        isAvailable,
+        stock,
       ];
 
   ProductModel copyWith({
@@ -93,28 +89,28 @@ class ProductModel extends Equatable {
     String? name,
     String? description,
     double? price,
-    int? stock,
-    String? categoryId,
     String? imageUrl,
-    bool? isAvailable,
+    String? categoryId,
     bool? hasDiscount,
     int? discountPercentage,
     double? discountPrice,
     int? soldCount,
+    bool? isAvailable,
+    int? stock,
   }) {
     return ProductModel(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       price: price ?? this.price,
-      stock: stock ?? this.stock,
-      categoryId: categoryId ?? this.categoryId,
       imageUrl: imageUrl ?? this.imageUrl,
-      isAvailable: isAvailable ?? this.isAvailable,
+      categoryId: categoryId ?? this.categoryId,
       hasDiscount: hasDiscount ?? this.hasDiscount,
       discountPercentage: discountPercentage ?? this.discountPercentage,
       discountPrice: discountPrice ?? this.discountPrice,
       soldCount: soldCount ?? this.soldCount,
+      isAvailable: isAvailable ?? this.isAvailable,
+      stock: stock ?? this.stock,
     );
   }
 }

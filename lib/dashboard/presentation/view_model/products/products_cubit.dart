@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_dashboard/core/services/image_picker_service.dart';
 import 'package:supabase_dashboard/core/services/supabase_service.dart';
 import 'package:supabase_dashboard/dashboard/data/models/product_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -83,41 +82,26 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  Future<void> deleteProduct(String? id) async {
-    if (id == null) {
-      emit(ProductsError('معرف المنتج غير صالح'));
-      return;
-    }
-
+  Future<void> deleteProduct(String id) async {
     try {
-      emit(ProductsLoading());
-
-      final product = await _supabase
+      // جلب بيانات المنتج قبل الحذف للحصول على روابط الصور
+      final response = await _supabase
           .from('products')
           .select()
           .eq('id', id)
           .single();
-
-      if (product != null && product['image_url'] != null) {
-        await ImagePickerService.deleteImage(product['image_url'], isProduct: true);
+      
+      final product = ProductModel.fromJson(response);
+      
+      // حذف الصور من storage إذا وجدت
+      if (product.imageUrl != null) {
+        final imagePath = Uri.parse(product.imageUrl!).pathSegments.last;
+        await _supabase.storage.from('products-images').remove([imagePath]);
       }
 
-      await _supabase
-          .from('products')
-          .delete()
-          .eq('id', id);
-      
-      // Load products again to update the UI
-      final response = await _supabase
-          .from('products')
-          .select('*, categories(*)')
-          .order('created_at', ascending: false);
-      
-      final products = (response as List)
-          .map((item) => ProductModel.fromJson(item))
-          .toList();
-      
-      emit(ProductsFetched(products));
+      // حذف المنتج من قاعدة البيانات
+      await _supabase.from('products').delete().eq('id', id);
+      await loadProducts();
       emit(ProductDeleteSuccess());
     } catch (e) {
       emit(ProductsError(e.toString()));

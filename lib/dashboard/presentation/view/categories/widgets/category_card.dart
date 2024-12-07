@@ -98,7 +98,7 @@ class CategoryCard extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                categoriesCubit.deleteCategory(category.id);
+                                categoriesCubit.deleteCategory(category.id!);
                                 Navigator.pop(context);
                               },
                               child: const Text('حذف'),

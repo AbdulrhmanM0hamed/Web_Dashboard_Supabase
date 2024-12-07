@@ -28,7 +28,7 @@ class MenuItemWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+            color: isSelected ? Colors.white.withOpacity(0.07) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -36,16 +36,16 @@ class MenuItemWidget extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? TColors.black : const Color.fromARGB(183, 255, 255, 255),
+                color: isSelected ? Colors.orange : const Color.fromARGB(183, 255, 255, 255),
                 size: 26,
               ),
               const SizedBox(width: 16),
               Text(
                 title,
                 style: getBoldStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontFamily: FontConstant.cairo,
-                  color: isSelected ? TColors.black : Colors.white70,
+                  color: isSelected ? Colors.orange : Colors.white70,
                 ),
               ),
             ],

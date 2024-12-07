@@ -301,4 +301,56 @@ class SupabaseService {
       return false;
     }
   }
+
+  // Special Offers
+  Future<List<Map<String, dynamic>>> getSpecialOffers() async {
+    try {
+      final response = await _client
+          .from('special_offers')
+          .select()
+          .order('created_at', ascending: false);
+
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      throw Exception('Error getting special offers: $e');
+    }
+  }
+
+  Future<void> addSpecialOffer(Map<String, dynamic> offer) async {
+    try {
+      await _client.from('special_offers').insert(offer);
+    } catch (e) {
+      throw Exception('Error adding special offer: $e');
+    }
+  }
+
+  Future<void> updateSpecialOffer(String id, Map<String, dynamic> offer) async {
+    try {
+      await _client
+          .from('special_offers')
+          .update(offer)
+          .eq('id', id);
+    } catch (e) {
+      throw Exception('Error updating special offer: $e');
+    }
+  }
+
+  Future<void> deleteSpecialOffer(String id) async {
+    try {
+      await _client.from('special_offers').delete().eq('id', id);
+    } catch (e) {
+      throw Exception('Error deleting special offer: $e');
+    }
+  }
+
+  Future<void> updateSpecialOfferStatus(String id, bool isActive) async {
+    try {
+      await _client
+          .from('special_offers')
+          .update({'is_active': isActive})
+          .eq('id', id);
+    } catch (e) {
+      throw Exception('Error updating special offer status: $e');
+    }
+  }
 }
