@@ -6,7 +6,7 @@ class SpecialOfferModel extends Equatable {
   final String subtitle;
   final String? image1;
   final String? image2;
-  final String? image3;
+
   final bool isActive;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -17,7 +17,7 @@ class SpecialOfferModel extends Equatable {
     required this.subtitle,
     this.image1,
     this.image2,
-    this.image3,
+ 
     this.isActive = true,
     this.createdAt,
     this.updatedAt,
@@ -30,7 +30,6 @@ class SpecialOfferModel extends Equatable {
       subtitle: json['subtitle'] ?? '',
       image1: json['image1'],
       image2: json['image2'],
-      image3: json['image3'],
       isActive: json['is_active'] ?? true,
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
@@ -43,7 +42,6 @@ class SpecialOfferModel extends Equatable {
       'subtitle': subtitle,
       'image1': image1,
       'image2': image2,
-      'image3': image3,
       'is_active': isActive,
     };
 
@@ -61,7 +59,6 @@ class SpecialOfferModel extends Equatable {
         subtitle,
         image1,
         image2,
-        image3,
         isActive,
         createdAt,
         updatedAt,
@@ -84,7 +81,6 @@ class SpecialOfferModel extends Equatable {
       subtitle: subtitle ?? this.subtitle,
       image1: image1 ?? this.image1,
       image2: image2 ?? this.image2,
-      image3: image3 ?? this.image3,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

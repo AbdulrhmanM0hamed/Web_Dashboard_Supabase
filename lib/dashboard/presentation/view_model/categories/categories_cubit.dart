@@ -99,7 +99,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
       // حذف الصورة من storage إذا وجدت
       if (category.imageUrl != null) {
-        final imagePath = Uri.parse(category.imageUrl!).pathSegments.last;
+        final imagePath = Uri.parse(category.imageUrl).pathSegments.last;
         await Supabase.instance.client.storage
             .from('categories-images')
             .remove([imagePath]);

@@ -39,7 +39,6 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
           subtitle: _subtitleController.text,
           image1: _image1,
           image2: _image2,
-          image3: _image3,
           isActive: _isActive,
         );
 
@@ -150,45 +149,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    children: [
-                      const Text('الصورة اليمين'),
-                      const SizedBox(height: 8),
-                      if (_image2 != null)
-                        Stack(
-                          children: [
-                            Image.network(
-                              _image2!,
-                              height: 100,
-                              width: double.infinity,
-                              fit: BoxFit.contain,
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  setState(() => _image2 = null);
-                                },
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        ElevatedButton(
-                          onPressed: () async {
-                            final imageUrl = await ImagePickerService
-                                .pickImageSpecialOffer();
-                            if (imageUrl != null) {
-                              setState(() => _image2 = imageUrl);
-                            }
-                          },
-                          child: const Text('اختر الصورة'),
-                        ),
-                    ],
-                  ),
-                ),
+                
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

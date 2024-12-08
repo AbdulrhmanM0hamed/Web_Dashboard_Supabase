@@ -53,7 +53,6 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
         'subtitle': offer.subtitle,
         'image1': offer.image1,
         'image2': offer.image2,
-        'image3': offer.image3,
         'is_active': offer.isActive,
       }).eq('id', offer.id!);
 
@@ -97,10 +96,7 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
         final image2Path = Uri.parse(offer.image2!).pathSegments.last;
         await _client.storage.from('specialOfferBucket-images').remove([image2Path]);
       }
-      if (offer.image3 != null) {
-        final image3Path = Uri.parse(offer.image3!).pathSegments.last;
-        await _client.storage.from('specialOfferBucket-images').remove([image3Path]);
-      }
+    
 
       // حذف العرض من قاعدة البيانات
       await _client.from('special_offers').delete().eq('id', id);

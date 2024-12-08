@@ -31,7 +31,6 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
     _subtitleController = TextEditingController(text: widget.offer.subtitle);
     _image1 = widget.offer.image1;
     _image2 = widget.offer.image2;
-    _image3 = widget.offer.image3;
     _isActive = widget.offer.isActive;
   }
 
@@ -53,7 +52,6 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
           subtitle: _subtitleController.text,
           image1: _image1,
           image2: _image2,
-          image3: _image3,
           isActive: _isActive,
         );
 
@@ -238,71 +236,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('الصورة الثانية'),
-                        const SizedBox(height: 8),
-                        if (_image2 != null)
-                          Stack(
-                            children: [
-                              Container(
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey),
-                                  image: DecorationImage(
-                                    image: NetworkImage(_image2!),
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(Icons.close, size: 20),
-                                    onPressed: () => setState(() => _image2 = null),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey[200],
-                              foregroundColor: Colors.black87,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            onPressed: () async {
-                              final imageUrl = await ImagePickerService.pickImageSpecialOffer();
-                              if (imageUrl != null) {
-                                setState(() => _image2 = imageUrl);
-                              }
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add_photo_alternate),
-                                SizedBox(width: 8),
-                                Text('اختر صورة'),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                 
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(

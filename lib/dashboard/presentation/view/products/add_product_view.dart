@@ -6,7 +6,6 @@ import 'package:supabase_dashboard/dashboard/data/models/product_model.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/categories/categories_cubit.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/products/products_cubit.dart';
 
-
 class AddProductView extends StatefulWidget {
   const AddProductView({super.key});
 
@@ -21,11 +20,39 @@ class _AddProductViewState extends State<AddProductView> {
   final _priceController = TextEditingController();
   final _stockController = TextEditingController();
   final _discountPercentageController = TextEditingController();
+  final _caloriesController = TextEditingController();
+  final _expiryNameController = TextEditingController();
+  final _expiryNumberController = TextEditingController();
   String? _imageUrl;
   String? _selectedCategoryId;
   bool _isAvailable = true;
   bool _hasDiscount = false;
   bool _isLoading = false;
+  bool _isOrganic = false;
+  double _discountPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _discountPercentageController.addListener(_calculateDiscountPrice);
+    _priceController.addListener(_calculateDiscountPrice);
+  }
+
+  void _calculateDiscountPrice() {
+    if (_hasDiscount && 
+        _priceController.text.isNotEmpty && 
+        _discountPercentageController.text.isNotEmpty) {
+      final price = double.tryParse(_priceController.text) ?? 0.0;
+      final discount = int.tryParse(_discountPercentageController.text) ?? 0;
+      setState(() {
+        _discountPrice = price * (1 - discount / 100);
+      });
+    } else {
+      setState(() {
+        _discountPrice = 0.0;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -34,6 +61,9 @@ class _AddProductViewState extends State<AddProductView> {
     _priceController.dispose();
     _stockController.dispose();
     _discountPercentageController.dispose();
+    _caloriesController.dispose();
+    _expiryNameController.dispose();
+    _expiryNumberController.dispose();
     super.dispose();
   }
 
@@ -42,7 +72,7 @@ class _AddProductViewState extends State<AddProductView> {
       setState(() {
         _isLoading = true;
       });
-      
+
       final imageUrl = await ImagePickerService.pickImage(isProduct: true);
       if (imageUrl != null) {
         setState(() {
@@ -52,7 +82,7 @@ class _AddProductViewState extends State<AddProductView> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-      const  SnackBar(
+        const SnackBar(
           content: Text('حدث خطأ أثناء رفع الصورة'),
           backgroundColor: Colors.red,
         ),
@@ -73,10 +103,10 @@ class _AddProductViewState extends State<AddProductView> {
 
         final name = _nameController.text.trim();
         final description = _descriptionController.text.trim();
-        final price = double.tryParse(_priceController.text) ?? 0.0;
-        final stock = int.tryParse(_stockController.text) ?? 0;
+        final price = double.parse(_priceController.text);
+        final stock = int.parse(_stockController.text);
         final discountPercentage = _hasDiscount
-            ? (int.tryParse(_discountPercentageController.text) ?? 0)
+            ? (int.parse(_discountPercentageController.text))
             : null;
 
         if (_imageUrl == null) {
@@ -88,15 +118,22 @@ class _AddProductViewState extends State<AddProductView> {
         }
 
         final product = ProductModel(
-          name: name,
-          description: description,
-          price: price,
-          stock: stock,
+          name: _nameController.text,
+          description: _descriptionController.text,
+          price: double.parse(_priceController.text),
+          imageUrl: _imageUrl,
           categoryId: _selectedCategoryId!,
-          imageUrl: _imageUrl!,
-          isAvailable: _isAvailable,
           hasDiscount: _hasDiscount,
-          discountPercentage: discountPercentage,
+          discountPercentage: _hasDiscount
+              ? int.parse(_discountPercentageController.text)
+              : null,
+          discountPrice: _hasDiscount ? _discountPrice : null,
+          isAvailable: _isAvailable,
+          stock: int.parse(_stockController.text),
+          isOrganic: _isOrganic,
+          caloriesPer100g: double.tryParse(_caloriesController.text) ?? 0.0,
+          expiryName: _expiryNameController.text,
+          expiryNumber: double.tryParse(_expiryNumberController.text) ?? 0.0,
         );
 
         await context.read<ProductsCubit>().createProduct(product);
@@ -279,18 +316,31 @@ class _AddProductViewState extends State<AddProductView> {
                 onChanged: (value) => setState(() => _isAvailable = value),
               ),
               SwitchListTile(
+                title: const Text('منتج عضوي'),
+                value: _isOrganic,
+                onChanged: (value) => setState(() => _isOrganic = value),
+              ),
+              SwitchListTile(
                 title: const Text('خصم'),
                 value: _hasDiscount,
-                onChanged: (value) => setState(() => _hasDiscount = value),
+                onChanged: (value) {
+                  setState(() {
+                    _hasDiscount = value;
+                    if (!value) {
+                      _discountPercentageController.clear();
+                      _discountPrice = 0.0;
+                    }
+                  });
+                  _calculateDiscountPrice();
+                },
               ),
               if (_hasDiscount) ...[
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _discountPercentageController,
                   decoration: const InputDecoration(
-                    labelText: 'نسبة الخصم',
+                    labelText: 'نسبة الخصم %',
                     border: OutlineInputBorder(),
-                    suffixText: '%',
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -304,19 +354,86 @@ class _AddProductViewState extends State<AddProductView> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 8),
+                if (_discountPrice > 0) ...[
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.local_offer, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Text(
+                          'السعر بعد الخصم: ${_discountPrice.toStringAsFixed(2)} ريال',
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
-           const    SizedBox(height: 32),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _caloriesController,
+                decoration: const InputDecoration(
+                  labelText: 'السعرات الحرارية لكل 100 جرام',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال السعرات الحرارية';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _expiryNameController,
+                decoration: const InputDecoration(
+                  labelText: 'اسم الصلاحية',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال اسم الصلاحية';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _expiryNumberController,
+                decoration: const InputDecoration(
+                  labelText: 'رقم الصلاحية',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال رقم الصلاحية';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 32),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: TColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
+                    backgroundColor: TColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
                   onPressed: _isLoading ? null : _submitForm,
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('إضافة المنتج' , style: TextStyle(color: Colors.white),),
+                      : const Text('إضافة المنتج', style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],
