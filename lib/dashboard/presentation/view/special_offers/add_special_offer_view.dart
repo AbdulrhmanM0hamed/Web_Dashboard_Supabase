@@ -21,6 +21,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
   String? _image3;
   bool _isActive = true;
   bool _isLoading = false;
+  bool _isUploadingImage = false;
 
   @override
   void dispose() {
@@ -45,14 +46,17 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
         await context.read<SpecialOffersCubit>().addSpecialOffer(offer);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar( backgroundColor: TColors.success ,content: Text('تم إضافة العرض بنجاح')),
+            const SnackBar(
+                backgroundColor: TColors.success,
+                content: Text('تم إضافة العرض بنجاح')),
           );
           Navigator.pop(context, true);
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar( backgroundColor: TColors.error ,content: Text('حدث خطأ: $e')),
+            SnackBar(
+                backgroundColor: TColors.error, content: Text('حدث خطأ: $e')),
           );
         }
       } finally {
@@ -135,32 +139,46 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                           ],
                         )
                       else
-                        ElevatedButton(
-                          onPressed: () async {
-                            final imageUrl = await ImagePickerService
-                                .pickImageSpecialOffer();
-                            if (imageUrl != null) {
-                              setState(() => _image1 = imageUrl);
-                            }
-                          },
-                          child: const Text('اختر الصورة'),
-                        ),
+                        _isUploadingImage
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: TColors.primary,
+                                ),
+                                onPressed: () async {
+                                  setState(() => _isUploadingImage = true);
+                                  try {
+                                    final imageUrl = await ImagePickerService
+                                        .pickImageSpecialOffer();
+                                    if (imageUrl != null) {
+                                      setState(() => _image1 = imageUrl);
+                                    }
+                                  } finally {
+                                    setState(() => _isUploadingImage = false);
+                                  }
+                                },
+                                child: const Text(
+                                  'اختر الصورة',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 16),
-                
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     children: [
                       const Text('الصورة الشمال'),
                       const SizedBox(height: 8),
-                      if (_image3 != null)
+                      if (_image2 != null)
                         Stack(
                           children: [
                             Image.network(
-                              _image3!,
+                              _image2!,
                               height: 100,
                               width: double.infinity,
                               fit: BoxFit.contain,
@@ -170,7 +188,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                               child: IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () {
-                                  setState(() => _image3 = null);
+                                  setState(() => _image2 = null);
                                 },
                               ),
                             ),
@@ -178,14 +196,20 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                         )
                       else
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TColors.primary,
+                          ),
                           onPressed: () async {
                             final imageUrl = await ImagePickerService
                                 .pickImageSpecialOffer();
                             if (imageUrl != null) {
-                              setState(() => _image3 = imageUrl);
+                              setState(() => _image2 = imageUrl);
                             }
                           },
-                          child: const Text('اختر الصورة'),
+                          child: const Text(
+                            'اختر الصورة',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                     ],
                   ),
@@ -208,7 +232,10 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                 onPressed: _isLoading ? null : _submitForm,
                 child: _isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('إضافة العرض' , style: TextStyle(color: Colors.white),),
+                    : const Text(
+                        'إضافة العرض',
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             ),
           ],

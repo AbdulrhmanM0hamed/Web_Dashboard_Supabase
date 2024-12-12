@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_dashboard/core/services/service_locator.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/categories/categories_view.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/products/products_view.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/special_offers/special_offers_view.dart';
+import 'package:supabase_dashboard/dashboard/presentation/view/users/users_view.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/widgets/dashboard_card_widget.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/widgets/dashboard_content.dart';
 
@@ -10,6 +12,7 @@ import 'package:supabase_dashboard/dashboard/presentation/view/widgets/side_menu
 import 'package:supabase_dashboard/dashboard/presentation/view_model/categories/categories_cubit.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/products/products_cubit.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/special_offers/special_offers_cubit.dart';
+import 'package:supabase_dashboard/dashboard/presentation/view_model/users/users_cubit.dart';
 
 class DashboardViewBody extends StatefulWidget {
   final int selectedIndex;
@@ -53,33 +56,43 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                 child: IndexedStack(
                   index: _selectedIndex,
                   children: [
-                MultiBlocProvider(
-                  providers: [
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider<ProductsCubit>(
+                          create: (context) => ProductsCubit()..loadProducts(),
+                        ),
+                        BlocProvider<CategoriesCubit>(
+                          create: (context) =>
+                              CategoriesCubit()..loadCategories(),
+                        ),
+                        BlocProvider<SpecialOffersCubit>(
+                          create: (context) =>
+                              SpecialOffersCubit()..loadSpecialOffers(),
+                        ),
+                        BlocProvider<UsersCubit>(
+                          create: (context) => getIt<UsersCubit>()..loadUsers(),
+                        ),
+                      ],
+                      child: const DashboardContenet(),
+                    ),
                     BlocProvider<ProductsCubit>(
                       create: (context) => ProductsCubit()..loadProducts(),
+                      child: const ProductsView(),
+                    ),
+                    BlocProvider<SpecialOffersCubit>(
+                      create: (context) =>
+                          SpecialOffersCubit()..loadSpecialOffers(),
+                      child: const SpecialOffersView(),
                     ),
                     BlocProvider<CategoriesCubit>(
                       create: (context) => CategoriesCubit()..loadCategories(),
+                      child: const CategoriesView(),
                     ),
-                    BlocProvider<SpecialOffersCubit>(
-                      create: (context) => SpecialOffersCubit()..loadSpecialOffers(),
+                    BlocProvider<UsersCubit>(
+                      create: (context) => getIt<UsersCubit>()..loadUsers(),
+                      child: const UsersView(),
                     ),
                   ],
-                  child: const DashboardContenet(),
-                ),
-                BlocProvider<ProductsCubit>(
-                  create: (context) => ProductsCubit()..loadProducts(),
-                  child: const ProductsView(),
-                ),
-                BlocProvider<SpecialOffersCubit>(
-                  create: (context) => SpecialOffersCubit()..loadSpecialOffers(),
-                  child: const SpecialOffersView(),
-                ),
-                BlocProvider<CategoriesCubit>(
-                  create: (context) => CategoriesCubit()..loadCategories(),
-                  child: const CategoriesView(),
-                ),
-              ],
                 ),
               ),
             ),
@@ -88,10 +101,4 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
       },
     );
   }
-
-
-
-
-
 }
-

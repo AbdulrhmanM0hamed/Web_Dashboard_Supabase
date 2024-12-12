@@ -56,17 +56,20 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
         );
 
         await context.read<SpecialOffersCubit>().updateSpecialOffer(offer);
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(backgroundColor: TColors.success, content: Text('تم تحديث العرض بنجاح')),
+            const SnackBar(
+                backgroundColor: TColors.success,
+                content: Text('تم تحديث العرض بنجاح')),
           );
           Navigator.pop(context, true);
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(backgroundColor: TColors.error, content: Text('حدث خطأ: $e')),
+            SnackBar(
+                backgroundColor: TColors.error, content: Text('حدث خطأ: $e')),
           );
         }
       } finally {
@@ -103,7 +106,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: TColors.primary),
+                    borderSide:const BorderSide(color: TColors.primary),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -139,7 +142,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: TColors.primary),
+                    borderSide:const BorderSide(color: TColors.primary),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -201,7 +204,8 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                                   ),
                                   child: IconButton(
                                     icon: const Icon(Icons.close, size: 20),
-                                    onPressed: () => setState(() => _image1 = null),
+                                    onPressed: () =>
+                                        setState(() => _image1 = null),
                                   ),
                                 ),
                               ),
@@ -218,7 +222,8 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                               ),
                             ),
                             onPressed: () async {
-                              final imageUrl = await ImagePickerService.pickImageSpecialOffer();
+                              final imageUrl = await ImagePickerService
+                                  .pickImageSpecialOffer();
                               if (imageUrl != null) {
                                 setState(() => _image1 = imageUrl);
                               }
@@ -236,15 +241,14 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                 
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('الصورة الثالثة'),
+                        const Text('الصورة الثانية'),
                         const SizedBox(height: 8),
-                        if (_image3 != null)
+                        if (_image2 != null)
                           Stack(
                             children: [
                               Container(
@@ -254,7 +258,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Colors.grey),
                                   image: DecorationImage(
-                                    image: NetworkImage(_image3!),
+                                    image: NetworkImage(_image2!),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -269,7 +273,8 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                                   ),
                                   child: IconButton(
                                     icon: const Icon(Icons.close, size: 20),
-                                    onPressed: () => setState(() => _image3 = null),
+                                    onPressed: () =>
+                                        setState(() => _image2 = null),
                                   ),
                                 ),
                               ),
@@ -286,9 +291,10 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                               ),
                             ),
                             onPressed: () async {
-                              final imageUrl = await ImagePickerService.pickImageSpecialOffer();
+                              final imageUrl = await ImagePickerService
+                                  .pickImageSpecialOffer();
                               if (imageUrl != null) {
-                                setState(() => _image3 = imageUrl);
+                                setState(() => _image2 = imageUrl);
                               }
                             },
                             child: const Row(

@@ -8,8 +8,11 @@ import 'package:supabase_dashboard/dashboard/presentation/view/special_offers/sp
 import 'package:supabase_dashboard/dashboard/presentation/view_model/special_offers/special_offers_cubit.dart';
 import 'package:supabase_dashboard/generated/l10n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/services/service_locator.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  setupServiceLocator();
   await Supabase.initialize(
     url: 'https://kizgmgaocdhnarvqtzvf.supabase.co', // Supabase URL
     anonKey:
