@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/constants/font_manger.dart';
 import 'package:supabase_dashboard/core/constants/styles_manger.dart';
 

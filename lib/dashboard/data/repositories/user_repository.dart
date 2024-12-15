@@ -21,8 +21,7 @@ class UserRepository {
           .map((user) => UserModel.fromJson(user))
           .toList();
     } catch (e) {
-      print('Error fetching users: $e'); // Debug print
-      rethrow; // رمي الخطأ للتعامل معه في الـ Cubit
+      rethrow;
     }
   }
 
