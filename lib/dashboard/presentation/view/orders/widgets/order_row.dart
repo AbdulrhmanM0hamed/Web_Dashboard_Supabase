@@ -90,9 +90,7 @@ DataRow buildOrderRow(BuildContext context, OrderModel order) {
                       ordersCubit.getStatusText(value),
                       style: getBoldStyle(fontFamily: FontConstant.cairo  , fontSize: FontSize.size14 , color: _getStatusColor(value))
                       
-                      //TextStyle(
-                  //      color: _getStatusColor(value),
-                     // ),
+                      
                     ),
                   );
                 }).toList(),

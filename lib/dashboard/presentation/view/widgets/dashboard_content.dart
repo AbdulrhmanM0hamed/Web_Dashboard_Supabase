@@ -1,45 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view/widgets/dashboard_card_widget.dart';
+import 'package:supabase_dashboard/dashboard/presentation/view_model/dashboard/dashboard_cubit.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/products/products_cubit.dart';
 
-class DashboardContenet extends StatelessWidget {
+class DashboardContenet extends StatefulWidget {
   const DashboardContenet({super.key});
 
   @override
+  State<DashboardContenet> createState() => _DashboardContenetState();
+}
+
+class _DashboardContenetState extends State<DashboardContenet> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<DashboardCubit>().loadDashboardData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  GridView.count(
-      crossAxisCount: 4,
-      crossAxisSpacing: 24,
-      mainAxisSpacing: 24,
-      childAspectRatio: 1.5,
-      children: const[
-        DashboardCard(
-          icon: Icons.shopping_bag,
-          title: 'المنتجات',
-          value: '120',
-          color: Colors.blue,
-        ),
-        DashboardCard(
-          icon: Icons.category,
-          title: 'التصنيفات',
-          value: '15',
-          color: Colors.green,
-        ),
-        DashboardCard(
-          icon: Icons.people,
-          title: 'المستخدمين',
-          value: '1,250',
-          color: Colors.orange,
-        ),
-        DashboardCard(
-          icon: Icons.shopping_cart,
-          title: 'الطلبات',
-          value: '20',
-          color: Colors.orange,
-        ),
-        MostSoldProductCard(),
-      ],
+    return BlocBuilder<DashboardCubit, DashboardState>(
+      builder: (context, state) {
+        if (state is DashboardLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state is DashboardError) {
+          return Center(
+            child: Text(
+              'حدث خطأ: ${state.message}',
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        if (state is DashboardLoaded) {
+          return GridView.count(
+            crossAxisCount: 4,
+            crossAxisSpacing: 24,
+            mainAxisSpacing: 24,
+            childAspectRatio: 1.5,
+            children: [
+              DashboardCard(
+                icon: Icons.shopping_bag,
+                title: 'المنتجات',
+                value: state.productsCount.toString(),
+                color: Colors.blue,
+              ),
+              DashboardCard(
+                icon: Icons.category,
+                title: 'التصنيفات',
+                value: state.categoriesCount.toString(),
+                color: Colors.green,
+              ),
+              DashboardCard(
+                icon: Icons.people,
+                title: 'المستخدمين',
+                value: state.usersCount.toString(),
+                color: Colors.orange,
+              ),
+              DashboardCard(
+                icon: Icons.shopping_cart,
+                title: 'الطلبات',
+                value: state.ordersCount.toString(),
+                color: Colors.orange,
+              ),
+              MostSoldProductCard(),
+            ],
+          );
+        }
+
+        return const SizedBox();
+      },
     );
   }
 }
@@ -87,7 +122,7 @@ class MostSoldProductCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    'السعر: ${product.price} ريال',
+                    'السعر: ${product.price} جنيه مصرى',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
