@@ -40,6 +40,7 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
       await loadSpecialOffers();
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
+      print(e);
       rethrow;
     }
   }

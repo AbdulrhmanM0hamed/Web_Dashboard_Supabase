@@ -16,9 +16,17 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _subtitleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _offerPriceController = TextEditingController();
+  final _newItemController = TextEditingController();
+  final _newTermController = TextEditingController();
+  
+  List<String> _includedItems = [];
+  List<String> _terms = [];
+  String? _categoryId;
+  DateTime? _validUntil;
   String? _image1;
   String? _image2;
-  String? _image3;
   bool _isActive = true;
   bool _isLoading = false;
   bool _isUploadingImage = false;
@@ -27,7 +35,41 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
   void dispose() {
     _titleController.dispose();
     _subtitleController.dispose();
+    _descriptionController.dispose();
+    _offerPriceController.dispose();
+    _newItemController.dispose();
+    _newTermController.dispose();
     super.dispose();
+  }
+
+  void _addIncludedItem() {
+    if (_newItemController.text.isNotEmpty) {
+      setState(() {
+        _includedItems.add(_newItemController.text);
+        _newItemController.clear();
+      });
+    }
+  }
+
+  void _removeIncludedItem(int index) {
+    setState(() {
+      _includedItems.removeAt(index);
+    });
+  }
+
+  void _addTerm() {
+    if (_newTermController.text.isNotEmpty) {
+      setState(() {
+        _terms.add(_newTermController.text);
+        _newTermController.clear();
+      });
+    }
+  }
+
+  void _removeTerm(int index) {
+    setState(() {
+      _terms.removeAt(index);
+    });
   }
 
   Future<void> _submitForm() async {
@@ -38,6 +80,11 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
         final offer = SpecialOfferModel(
           title: _titleController.text,
           subtitle: _subtitleController.text,
+          description: _descriptionController.text,
+          offerPrice: double.tryParse(_offerPriceController.text),
+          includedItems: _includedItems,
+          validUntil: _validUntil,
+          terms: _terms,
           image1: _image1,
           image2: _image2,
           isActive: _isActive,
@@ -50,13 +97,14 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                 backgroundColor: TColors.success,
                 content: Text('تم إضافة العرض بنجاح')),
           );
-          Navigator.pop(context, true);
+          Navigator.pop(context);
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                backgroundColor: TColors.error, content: Text('حدث خطأ: $e')),
+                backgroundColor: TColors.error,
+                content: Text('حدث خطأ: ${e.toString()}')),
           );
         }
       } finally {
@@ -71,174 +119,333 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إضافة عرض خاص'),
+        title: const Text('إضافة عرض جديد'),
       ),
       body: Form(
         key: _formKey,
-        child: ListView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'عنوان العرض',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'برجاء إدخال عنوان العرض';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _subtitleController,
-              decoration: const InputDecoration(
-                labelText: 'العنوان الفرعي للعرض',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'برجاء إدخال العنوان الفرعي للعرض';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'صور العرض:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      const Text('الصورة الأساسية'),
-                      const SizedBox(height: 8),
-                      if (_image1 != null)
-                        Stack(
-                          children: [
-                            Image.network(
-                              _image1!,
-                              height: 100,
-                              width: double.infinity,
-                              fit: BoxFit.contain,
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  setState(() => _image1 = null);
-                                },
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        _isUploadingImage
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: TColors.primary,
-                                ),
-                                onPressed: () async {
-                                  setState(() => _isUploadingImage = true);
-                                  try {
-                                    final imageUrl = await ImagePickerService
-                                        .pickImageSpecialOffer();
-                                    if (imageUrl != null) {
-                                      setState(() => _image1 = imageUrl);
-                                    }
-                                  } finally {
-                                    setState(() => _isUploadingImage = false);
-                                  }
-                                },
-                                child: const Text(
-                                  'اختر الصورة',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                    ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'عنوان العرض *',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  filled: true,
+                  fillColor: Colors.grey[50],
                 ),
-                const SizedBox(width: 16),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    children: [
-                      const Text('الصورة الشمال'),
-                      const SizedBox(height: 8),
-                      if (_image2 != null)
-                        Stack(
-                          children: [
-                            Image.network(
-                              _image2!,
-                              height: 100,
-                              width: double.infinity,
-                              fit: BoxFit.contain,
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  setState(() => _image2 = null);
-                                },
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: TColors.primary,
-                          ),
-                          onPressed: () async {
-                            final imageUrl = await ImagePickerService
-                                .pickImageSpecialOffer();
-                            if (imageUrl != null) {
-                              setState(() => _image2 = imageUrl);
-                            }
-                          },
-                          child: const Text(
-                            'اختر الصورة',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'برجاء إدخال عنوان العرض';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _subtitleController,
+                decoration: InputDecoration(
+                  labelText: 'العنوان الفرعي *',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[50],
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'برجاء إدخال العنوان الفرعي';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'وصف العرض',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[50],
+                ),
+                maxLines: 3,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _offerPriceController,
+                decoration: InputDecoration(
+                  labelText: 'سعر العرض',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[50],
+                  prefixIcon: const Icon(Icons.attach_money),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'المميزات المتضمنة',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _newItemController,
+                      decoration: InputDecoration(
+                        labelText: 'أضف ميزة',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SwitchListTile(
-              title: const Text('نشط'),
-              value: _isActive,
-              onChanged: (value) => setState(() => _isActive = value),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: TColors.primary,
-                ),
-                onPressed: _isLoading ? null : _submitForm,
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        'إضافة العرض',
-                        style: TextStyle(color: Colors.white),
+                        filled: true,
+                        fillColor: Colors.grey[50],
                       ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: _addIncludedItem,
+                    icon: const Icon(Icons.add_circle),
+                    color: TColors.primary,
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: _includedItems.asMap().entries.map((entry) {
+                  return Chip(
+                    label: Text(entry.value),
+                    deleteIcon: const Icon(Icons.close, size: 18),
+                    onDeleted: () => _removeIncludedItem(entry.key),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'الشروط والأحكام',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _newTermController,
+                      decoration: InputDecoration(
+                        labelText: 'أضف شرط',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: _addTerm,
+                    icon: const Icon(Icons.add_circle),
+                    color: TColors.primary,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: _terms.asMap().entries.map((entry) {
+                  return Chip(
+                    label: Text(entry.value),
+                    deleteIcon: const Icon(Icons.close, size: 18),
+                    onDeleted: () => _removeTerm(entry.key),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 24),
+              ListTile(
+                title: const Text('تاريخ انتهاء العرض'),
+                subtitle: Text(_validUntil?.toString() ?? 'غير محدد'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 365)),
+                    );
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (time != null) {
+                        setState(() {
+                          _validUntil = DateTime(
+                            date.year,
+                            date.month,
+                            date.day,
+                            time.hour,
+                            time.minute,
+                          );
+                        });
+                      }
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'صور العرض:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text('الصورة الأساسية'),
+                        const SizedBox(height: 8),
+                        if (_image1 != null)
+                          Stack(
+                            children: [
+                              Image.network(
+                                _image1!,
+                                height: 100,
+                                width: double.infinity,
+                                fit: BoxFit.contain,
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    setState(() => _image1 = null);
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          _isUploadingImage
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: TColors.primary,
+                                  ),
+                                  onPressed: () async {
+                                    setState(() => _isUploadingImage = true);
+                                    try {
+                                      final imageUrl = await ImagePickerService
+                                          .pickImageSpecialOffer();
+                                      if (imageUrl != null) {
+                                        setState(() => _image1 = imageUrl);
+                                      }
+                                    } finally {
+                                      setState(() => _isUploadingImage = false);
+                                    }
+                                  },
+                                  child: const Text(
+                                    'اختر الصورة',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text('الصورة الشمال'),
+                        const SizedBox(height: 8),
+                        if (_image2 != null)
+                          Stack(
+                            children: [
+                              Image.network(
+                                _image2!,
+                                height: 100,
+                                width: double.infinity,
+                                fit: BoxFit.contain,
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    setState(() => _image2 = null);
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: TColors.primary,
+                            ),
+                            onPressed: () async {
+                              final imageUrl = await ImagePickerService
+                                  .pickImageSpecialOffer();
+                              if (imageUrl != null) {
+                                setState(() => _image2 = imageUrl);
+                              }
+                            },
+                            child: const Text(
+                              'اختر الصورة',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                title: const Text('نشط'),
+                value: _isActive,
+                onChanged: (value) => setState(() => _isActive = value),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: _isLoading ? null : _submitForm,
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          'إضافة العرض',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
