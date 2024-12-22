@@ -372,51 +372,51 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Text('الصورة الشمال'),
-                        const SizedBox(height: 8),
-                        if (_image2 != null)
-                          Stack(
-                            children: [
-                              Image.network(
-                                _image2!,
-                                height: 100,
-                                width: double.infinity,
-                                fit: BoxFit.contain,
-                              ),
-                              Positioned(
-                                right: 0,
-                                child: IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    setState(() => _image2 = null);
-                                  },
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: TColors.primary,
-                            ),
-                            onPressed: () async {
-                              final imageUrl = await ImagePickerService
-                                  .pickImageSpecialOffer();
-                              if (imageUrl != null) {
-                                setState(() => _image2 = imageUrl);
-                              }
-                            },
-                            child: const Text(
-                              'اختر الصورة',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Column(
+                  //     children: [
+                  //       const Text('الصورة الشمال'),
+                  //       const SizedBox(height: 8),
+                  //       if (_image2 != null)
+                  //         Stack(
+                  //           children: [
+                  //             Image.network(
+                  //               _image2!,
+                  //               height: 100,
+                  //               width: double.infinity,
+                  //               fit: BoxFit.contain,
+                  //             ),
+                  //             Positioned(
+                  //               right: 0,
+                  //               child: IconButton(
+                  //                 icon: const Icon(Icons.close),
+                  //                 onPressed: () {
+                  //                   setState(() => _image2 = null);
+                  //                 },
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         )
+                  //       else
+                  //         ElevatedButton(
+                  //           style: ElevatedButton.styleFrom(
+                  //             backgroundColor: TColors.primary,
+                  //           ),
+                  //           onPressed: () async {
+                  //             final imageUrl = await ImagePickerService
+                  //                 .pickImageSpecialOffer();
+                  //             if (imageUrl != null) {
+                  //               setState(() => _image2 = imageUrl);
+                  //             }
+                  //           },
+                  //           child: const Text(
+                  //             'اختر الصورة',
+                  //             style: TextStyle(color: Colors.white),
+                  //           ),
+                  //         ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -430,6 +430,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: TColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -440,7 +441,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                       ? const CircularProgressIndicator()
                       : const Text(
                           'إضافة العرض',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16 , color: Colors.white),
                         ),
                 ),
               ),

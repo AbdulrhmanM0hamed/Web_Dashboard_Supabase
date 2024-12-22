@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/constants/font_manger.dart';
 import 'package:supabase_dashboard/core/constants/styles_manger.dart';
 
@@ -35,7 +36,7 @@ class MenuItemWidget extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? Colors.orange : const Color.fromARGB(183, 255, 255, 255),
+                color: isSelected ? TColors.black : const Color.fromARGB(183, 255, 255, 255),
                 size: 26,
               ),
               const SizedBox(width: 16),
@@ -44,7 +45,7 @@ class MenuItemWidget extends StatelessWidget {
                 style: getBoldStyle(
                   fontSize: 17,
                   fontFamily: FontConstant.cairo,
-                  color: isSelected ? Colors.orange : Colors.white70,
+                  color: isSelected ? TColors.black : Colors.white70,
                 ),
               ),
             ],

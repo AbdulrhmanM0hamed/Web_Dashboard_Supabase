@@ -218,15 +218,19 @@ class _ProductsViewState extends State<ProductsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // صورة المنتج
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child:  Image.network(
-                        product.imageUrl!,
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.contain,
-                      ),
+              Container(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.network(
+                  product.imageUrl!,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

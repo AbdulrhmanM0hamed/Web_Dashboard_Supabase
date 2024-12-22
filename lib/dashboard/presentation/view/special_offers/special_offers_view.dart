@@ -90,11 +90,18 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (offer.image1 != null)
-                      Image.network(
-                        offer.image1!,
-                        height: 200,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
+                      Container(
+                        
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Image.network(
+                          offer.image1!,
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -129,14 +136,18 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => BlocProvider(
-                                            create: (context) => SpecialOffersCubit(),
-                                            child: EditSpecialOfferView(offer: offer),
+                                            create: (context) =>
+                                                SpecialOffersCubit(),
+                                            child: EditSpecialOfferView(
+                                                offer: offer),
                                           ),
                                         ),
                                       );
-                                      
+
                                       if (result == true && context.mounted) {
-                                        context.read<SpecialOffersCubit>().loadSpecialOffers();
+                                        context
+                                            .read<SpecialOffersCubit>()
+                                            .loadSpecialOffers();
                                       }
                                     },
                                   ),
@@ -145,12 +156,13 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
                                     onChanged: (value) {
                                       context
                                           .read<SpecialOffersCubit>()
-                                          .toggleSpecialOfferStatus(offer.id!, value);
+                                          .toggleSpecialOfferStatus(
+                                              offer.id!, value);
                                     },
                                   ),
                                   IconButton(
-                                    icon:
-                                        const Icon(Icons.delete, color: Colors.red),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () async {
                                       final confirmed = await showDialog<bool>(
                                         context: context,

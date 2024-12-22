@@ -38,38 +38,61 @@ class _DashboardContenetState extends State<DashboardContenet> {
         }
 
         if (state is DashboardLoaded) {
-          return GridView.count(
-            crossAxisCount: 4,
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: 1.5,
-            children: [
-              DashboardCard(
-                icon: Icons.shopping_bag,
-                title: 'المنتجات',
-                value: state.productsCount.toString(),
-                color: Colors.blue,
-              ),
-              DashboardCard(
-                icon: Icons.category,
-                title: 'التصنيفات',
-                value: state.categoriesCount.toString(),
-                color: Colors.green,
-              ),
-              DashboardCard(
-                icon: Icons.people,
-                title: 'المستخدمين',
-                value: state.usersCount.toString(),
-                color: Colors.orange,
-              ),
-              DashboardCard(
-                icon: Icons.shopping_cart,
-                title: 'الطلبات',
-                value: state.ordersCount.toString(),
-                color: Colors.orange,
-              ),
-              MostSoldProductCard(),
-            ],
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              int crossAxisCount;
+              double childAspectRatio;
+              
+              // Responsive breakpoints
+              if (constraints.maxWidth < 600) {
+                crossAxisCount = 1;
+                childAspectRatio = 1.5;
+              } else if (constraints.maxWidth < 900) {
+                crossAxisCount = 2;
+                childAspectRatio = 1.3;
+              } else if (constraints.maxWidth < 1200) {
+                crossAxisCount = 3;
+                childAspectRatio = 1.4;
+              } else {
+                crossAxisCount = 4;
+                childAspectRatio = 1.5;
+              }
+
+              return GridView.count(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 24,
+                childAspectRatio: childAspectRatio,
+                padding: const EdgeInsets.all(24),
+                children: [
+                  DashboardCard(
+                    icon: Icons.shopping_bag,
+                    title: 'المنتجات',
+                    value: state.productsCount.toString(),
+                    color: Colors.blue,
+                  ),
+                  DashboardCard(
+                    icon: Icons.category,
+                    title: 'التصنيفات',
+                    value: state.categoriesCount.toString(),
+                    color: Colors.green,
+                  ),
+                  DashboardCard(
+                    icon: Icons.people,
+                    title: 'المستخدمين',
+                    value: state.usersCount.toString(),
+                    color: Colors.orange,
+                  ),
+                  DashboardCard(
+                    icon: Icons.shopping_cart,
+                    title: 'الطلبات',
+                    value: state.ordersCount.toString(),
+                    color: Colors.orange,
+                  ),
+                  MostSoldProductCard(),
+                ],
+              );
+            },
           );
         }
 
