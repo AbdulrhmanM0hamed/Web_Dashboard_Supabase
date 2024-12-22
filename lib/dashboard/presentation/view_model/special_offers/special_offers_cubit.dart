@@ -18,15 +18,20 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
           .select()
           .order('created_at', ascending: false);
       
+      print('Raw response from database: $response'); // Debug log
+      
       final offers = (response as List)
           .map((offer) => SpecialOfferModel.fromJson(offer))
           .toList();
+      
+      print('First offer terms (if any): ${offers.isNotEmpty ? offers.first.terms : []}'); // Debug log
           
       emit(state.copyWith(
         isLoading: false,
         offers: offers,
       ));
     } catch (e) {
+      print('Error loading special offers: $e'); // Debug log
       emit(state.copyWith(
         isLoading: false,
         error: e.toString(),
@@ -36,11 +41,15 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
 
   Future<void> addSpecialOffer(SpecialOfferModel offer) async {
     try {
-      await _client.from('special_offers').insert(offer.toJson());
+      print('Adding special offer with terms: ${offer.terms}'); 
+      final data = offer.toJson();
+      print('JSON data to be sent: $data'); 
+      
+      await _client.from('special_offers').insert(data);
       await loadSpecialOffers();
     } catch (e) {
+      print('Error adding special offer: $e'); 
       emit(state.copyWith(error: e.toString()));
-      print(e);
       rethrow;
     }
   }
@@ -49,13 +58,7 @@ class SpecialOffersCubit extends Cubit<SpecialOffersState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      await _client.from('special_offers').update({
-        'title': offer.title,
-        'subtitle': offer.subtitle,
-        'image1': offer.image1,
-        'image2': offer.image2,
-        'is_active': offer.isActive,
-      }).eq('id', offer.id!);
+      await _client.from('special_offers').update(offer.toJson()).eq('id', offer.id!);
 
       await loadSpecialOffers();
     } catch (e) {

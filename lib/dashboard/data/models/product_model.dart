@@ -19,7 +19,7 @@ class ProductModel extends Equatable {
   final int ratingCount;
   final double caloriesPer100g;
   final String expiryName;
-  final double expiryNumber;
+  final double weight;
 
   const ProductModel({
     this.id,
@@ -39,7 +39,7 @@ class ProductModel extends Equatable {
     this.ratingCount = 0,
     this.caloriesPer100g = 0.0,
     this.expiryName = '',
-    this.expiryNumber = 0.0,
+    this.weight = 0.0,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -63,7 +63,7 @@ class ProductModel extends Equatable {
       caloriesPer100g:
           double.tryParse(json['calories_per_100g']?.toString() ?? '0') ?? 0.0,
       expiryName: json['expiry_name'] ?? '',
-      expiryNumber: double.tryParse(json['expiry_number']?.toString() ?? '0') ?? 0.0,
+      weight: double.tryParse(json['weight']?.toString() ?? '0') ?? 0.0,
     );
   }
 
@@ -85,7 +85,7 @@ class ProductModel extends Equatable {
       'rating_count': ratingCount,
       'calories_per_100g': caloriesPer100g,
       'expiry_name': expiryName,
-      'expiry_number': expiryNumber
+      'weight': weight
     };
 
     if (!forCreation && id != null) {
@@ -114,7 +114,7 @@ class ProductModel extends Equatable {
         ratingCount,
         caloriesPer100g,
         expiryName,
-        expiryNumber
+        weight
       ];
 
   ProductModel copyWith(
@@ -156,6 +156,6 @@ class ProductModel extends Equatable {
         ratingCount: ratingCount ?? this.ratingCount,
         caloriesPer100g: caloriesPer100g ?? this.caloriesPer100g,
         expiryName: expiryName ?? this.expiryName,
-        expiryNumber: expiryNumber ?? this.expiryNumber);
+        weight: expiryNumber ?? this.weight);
   }
 }

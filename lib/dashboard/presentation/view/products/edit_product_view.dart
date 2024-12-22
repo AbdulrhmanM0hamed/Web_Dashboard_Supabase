@@ -71,7 +71,7 @@ class _EditProductViewState extends State<EditProductView> {
     _isOrganic = widget.product.isOrganic;
     _caloriesController.text = widget.product.caloriesPer100g.toString();
     _expiryNameController.text = widget.product.expiryName;
-    _expiryNumberController.text = widget.product.expiryNumber.toString();
+    _expiryNumberController.text = widget.product.weight.toString();
     if (_hasDiscount && widget.product.discountPercentage != null) {
       _discountPercentageController.text = widget.product.discountPercentage.toString();
       _discountPrice = widget.product.discountPrice ?? 0.0;
@@ -318,7 +318,7 @@ class _EditProductViewState extends State<EditProductView> {
               },
             ),
             SwitchListTile(
-              title: const Text('منتج عضوي'),
+              title: const Text('منتج صحى'),
               value: _isOrganic,
               onChanged: (value) => setState(() => _isOrganic = value),
             ),
@@ -385,7 +385,7 @@ class _EditProductViewState extends State<EditProductView> {
             TextFormField(
               controller: _expiryNameController,
               decoration: const InputDecoration(
-                labelText: 'اسم الصلاحية',
+                labelText: 'وقت التحضير',
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
@@ -399,7 +399,7 @@ class _EditProductViewState extends State<EditProductView> {
             TextFormField(
               controller: _expiryNumberController,
               decoration: const InputDecoration(
-                labelText: 'رقم الصلاحية',
+                labelText: 'الوزن بالجرام',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,

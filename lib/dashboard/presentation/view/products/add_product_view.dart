@@ -22,7 +22,7 @@ class _AddProductViewState extends State<AddProductView> {
   final _discountPercentageController = TextEditingController();
   final _caloriesController = TextEditingController();
   final _expiryNameController = TextEditingController();
-  final _expiryNumberController = TextEditingController();
+  final _weightNumberController = TextEditingController();
   String? _imageUrl;
   String? _selectedCategoryId;
   bool _isAvailable = true;
@@ -63,7 +63,7 @@ class _AddProductViewState extends State<AddProductView> {
     _discountPercentageController.dispose();
     _caloriesController.dispose();
     _expiryNameController.dispose();
-    _expiryNumberController.dispose();
+    _weightNumberController.dispose();
     super.dispose();
   }
 
@@ -133,7 +133,7 @@ class _AddProductViewState extends State<AddProductView> {
           isOrganic: _isOrganic,
           caloriesPer100g: double.tryParse(_caloriesController.text) ?? 0.0,
           expiryName: _expiryNameController.text,
-          expiryNumber: double.tryParse(_expiryNumberController.text) ?? 0.0,
+          weight: double.tryParse(_weightNumberController.text) ?? 0.0,
         );
 
         await context.read<ProductsCubit>().createProduct(product);
@@ -397,27 +397,27 @@ class _AddProductViewState extends State<AddProductView> {
               TextFormField(
                 controller: _expiryNameController,
                 decoration: const InputDecoration(
-                  labelText: 'اسم الصلاحية',
+                  labelText: 'وقت التحضير',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال اسم الصلاحية';
+                    return 'الرجاء إدخال وفت التحضير';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _expiryNumberController,
+                controller: _weightNumberController,
                 decoration: const InputDecoration(
-                  labelText: 'رقم الصلاحية',
+                  labelText: 'الوزن بالجرام',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال رقم الصلاحية';
+                    return 'الرجاء إدخال الوزن';
                   }
                   return null;
                 },

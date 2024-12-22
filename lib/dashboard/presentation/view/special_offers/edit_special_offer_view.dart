@@ -109,7 +109,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
           categoryId: _categoryId,
           customizations: _customizations,
           image1: _image1,
-          image2: _image2,
+       //   image2: _image2,
           isActive: _isActive,
         );
 
@@ -398,51 +398,51 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Text('الصورة الشمال'),
-                        const SizedBox(height: 8),
-                        if (_image2 != null)
-                          Stack(
-                            children: [
-                              Image.network(
-                                _image2!,
-                                height: 100,
-                                width: double.infinity,
-                                fit: BoxFit.contain,
-                              ),
-                              Positioned(
-                                right: 0,
-                                child: IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    setState(() => _image2 = null);
-                                  },
-                                ),
-                              ),
-                            ],
-                          )
-                        else
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: TColors.primary,
-                            ),
-                            onPressed: () async {
-                              final imageUrl = await ImagePickerService
-                                  .pickImageSpecialOffer();
-                              if (imageUrl != null) {
-                                setState(() => _image2 = imageUrl);
-                              }
-                            },
-                            child: const Text(
-                              'اختر الصورة',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Column(
+                  //     children: [
+                  //       const Text('الصورة الشمال'),
+                  //       const SizedBox(height: 8),
+                  //       if (_image2 != null)
+                  //         Stack(
+                  //           children: [
+                  //             Image.network(
+                  //               _image2!,
+                  //               height: 100,
+                  //               width: double.infinity,
+                  //               fit: BoxFit.contain,
+                  //             ),
+                  //             Positioned(
+                  //               right: 0,
+                  //               child: IconButton(
+                  //                 icon: const Icon(Icons.close),
+                  //                 onPressed: () {
+                  //                   setState(() => _image2 = null);
+                  //                 },
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         )
+                  //       else
+                  //         ElevatedButton(
+                  //           style: ElevatedButton.styleFrom(
+                  //             backgroundColor: TColors.primary,
+                  //           ),
+                  //           onPressed: () async {
+                  //             final imageUrl = await ImagePickerService
+                  //                 .pickImageSpecialOffer();
+                  //             if (imageUrl != null) {
+                  //               setState(() => _image2 = imageUrl);
+                  //             }
+                  //           },
+                  //           child: const Text(
+                  //             'اختر الصورة',
+                  //             style: TextStyle(color: Colors.white),
+                  //           ),
+                  //         ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 16),

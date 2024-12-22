@@ -61,6 +61,8 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
     if (_newTermController.text.isNotEmpty) {
       setState(() {
         _terms.add(_newTermController.text);
+        print('Added term: ${_newTermController.text}'); // Debug log
+        print('Current terms: $_terms'); // Debug log
         _newTermController.clear();
       });
     }
@@ -86,7 +88,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
           validUntil: _validUntil,
           terms: _terms,
           image1: _image1,
-          image2: _image2,
+      //    image2: _image2,
           isActive: _isActive,
         );
 
