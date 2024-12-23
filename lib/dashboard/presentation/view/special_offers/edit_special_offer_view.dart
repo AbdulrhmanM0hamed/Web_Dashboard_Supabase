@@ -122,7 +122,7 @@ class _EditSpecialOfferViewState extends State<EditSpecialOfferView> {
                 backgroundColor: TColors.success,
                 content: Text('تم تحديث العرض بنجاح')),
           );
-          Navigator.pop(context);
+          Navigator.pop(context, true); // Return true to trigger refresh
         }
       } catch (e) {
         if (mounted) {

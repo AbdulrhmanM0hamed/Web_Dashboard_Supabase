@@ -99,7 +99,7 @@ class _AddSpecialOfferViewState extends State<AddSpecialOfferView> {
                 backgroundColor: TColors.success,
                 content: Text('تم إضافة العرض بنجاح')),
           );
-          Navigator.pop(context);
+          Navigator.pop(context, true); // Return true to trigger refresh
         }
       } catch (e) {
         if (mounted) {
