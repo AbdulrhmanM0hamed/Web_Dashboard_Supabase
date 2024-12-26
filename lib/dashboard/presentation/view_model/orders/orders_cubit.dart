@@ -35,7 +35,9 @@ class OrdersCubit extends Cubit<OrdersState> {
 
   Future<void> _playNotificationSound() async {
     try {
+      await _audioPlayer.stop();
       await _audioPlayer.seek(Duration.zero);
+      await _audioPlayer.setAsset('assets/sounds/tone.mp3');
       await _audioPlayer.play();
     } catch (e) {
       print('Error playing notification sound: $e');
