@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/order_model.dart';
 
 class OrderRepository {
   final SupabaseClient _supabaseClient;
+  final _ordersController = StreamController<List<OrderModel>>.broadcast();
 
-  OrderRepository(this._supabaseClient);
+  OrderRepository(this._supabaseClient) {
+    _initializeRealtimeSubscription();
+  }
 
   Future<List<OrderModel>> getOrders() async {
     try {
@@ -49,5 +54,22 @@ class OrderRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Stream<List<OrderModel>> get ordersStream => _ordersController.stream;
+
+  void _initializeRealtimeSubscription() {
+    _supabaseClient
+        .from('orders')
+        .stream(primaryKey: ['id'])
+        .order('created_at')
+        .listen((List<Map<String, dynamic>> data) {
+          final orders = data.map((order) => OrderModel.fromJson(order)).toList();
+          _ordersController.add(orders);
+        });
+  }
+
+  void dispose() {
+    _ordersController.close();
   }
 }

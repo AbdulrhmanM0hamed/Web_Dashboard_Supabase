@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/constants/font_manger.dart';
 import 'package:supabase_dashboard/core/constants/styles_manger.dart';
@@ -18,17 +19,17 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 250,
-      color: TColors.primary,
+      color: TColors.darkerGrey,
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(vertical: 24 ,),
             child: Column(
               children: [
-                const Icon(
-                  Icons.dashboard_rounded,
-                  size: 40,
-                  color: TColors.secondary,
+                 SvgPicture.asset(
+                  'assets/logo.svg',
+                  height: 100,
+                  width: 100,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -94,23 +95,7 @@ class SideMenu extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(color: Colors.white24),
-          ListTile(
-            leading: const Icon(
-              Icons.settings_outlined,
-              color: Colors.white70,
-            ),
-            title: Text(
-              'الإعدادات',
-              style: getRegularStyle(
-                fontFamily: FontConstant.cairo,
-                color: Colors.white70,
-              ),
-            ),
-            onTap: () {
-              // Handle settings
-            },
-          ),
+     
          
           
         ],
