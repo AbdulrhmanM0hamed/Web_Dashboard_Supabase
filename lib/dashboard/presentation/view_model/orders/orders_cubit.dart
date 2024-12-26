@@ -20,7 +20,7 @@ class OrdersCubit extends Cubit<OrdersState> {
   }
 
   Future<void> _initAudioPlayer() async {
-    await _audioPlayer.setAsset('assets/sounds/tone.mp3');
+    await _audioPlayer.setAsset('assets/sounds/tone (2).mp3');
   }
 
   void _subscribeToOrders() {
