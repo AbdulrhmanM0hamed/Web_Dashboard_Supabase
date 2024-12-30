@@ -19,15 +19,15 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 250,
-      color: TColors.darkerGrey,
+      color: const Color.fromARGB(255, 27, 27, 27),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 24 ,),
             child: Column(
               children: [
-                 SvgPicture.asset(
-                  'assets/logo.svg',
+                 Image.asset(
+                  'assets/logo.png',
                   height: 100,
                   width: 100,
                 ),

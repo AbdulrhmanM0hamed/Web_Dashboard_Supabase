@@ -36,7 +36,7 @@ class MenuItemWidget extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? TColors.black : const Color.fromARGB(183, 255, 255, 255),
+                color: isSelected ? TColors.primary : const Color.fromARGB(183, 255, 255, 255),
                 size: 26,
               ),
               const SizedBox(width: 16),
@@ -45,7 +45,7 @@ class MenuItemWidget extends StatelessWidget {
                 style: getBoldStyle(
                   fontSize: 17,
                   fontFamily: FontConstant.cairo,
-                  color: isSelected ? TColors.black : Colors.white70,
+                  color: isSelected ? TColors.primary : Colors.white70,
                 ),
               ),
             ],
