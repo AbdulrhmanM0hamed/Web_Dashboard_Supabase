@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/services/image_picker_service.dart';
 import 'package:supabase_dashboard/dashboard/data/models/product_model.dart';
+import 'package:supabase_dashboard/dashboard/presentation/view_model/categories/categories_cubit.dart';
 import 'package:supabase_dashboard/dashboard/presentation/view_model/products/products_cubit.dart';
 
 class EditProductView extends StatefulWidget {
@@ -250,6 +251,42 @@ class _EditProductViewState extends State<EditProductView> {
                   return 'الرجاء إدخال وصف المنتج';
                 }
                 return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<CategoriesCubit, CategoriesState>(
+              builder: (context, state) {
+                if (state is CategoriesLoading) {
+                  return const CircularProgressIndicator();
+                }
+                if (state is CategoriesLoaded) {
+                  final categories = state.categories;
+                  return DropdownButtonFormField<String>(
+                    value: _selectedCategoryId,
+                    decoration: const InputDecoration(
+                      labelText: 'الفئة',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: categories.map((category) {
+                      return DropdownMenuItem(
+                        value: category.id,
+                        child: Text(category.name),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategoryId = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء اختيار فئة';
+                      }
+                      return null;
+                    },
+                  );
+                }
+                return const Text('حدث خطأ في تحميل الفئات');
               },
             ),
             const SizedBox(height: 16),
