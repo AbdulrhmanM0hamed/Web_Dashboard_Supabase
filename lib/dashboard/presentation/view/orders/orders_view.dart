@@ -107,9 +107,9 @@ class _OrdersViewState extends State<OrdersView> {
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     child: ListTile(
                       title: Text(item.productName),
-                      subtitle: Text('${item.quantity} × ${item.price} جنيه'),
+                      subtitle: Text('${item.quantity} × ${item.price} ريال'),
                       trailing: Text(
-                        '${item.quantity * item.price} جنيه',
+                        '${item.quantity * item.price} ريال',
                         style: getBoldStyle(fontFamily: FontConstant.cairo  , fontSize: FontSize.size14 , color: TColors.primary),
                       ),
                     ),
@@ -126,7 +126,7 @@ class _OrdersViewState extends State<OrdersView> {
                     ),
                   ),
                   Text(
-                    '${order.totalAmount} جنيه',
+                    '${order.totalAmount} ريال',
                     style: getBoldStyle(fontFamily: FontConstant.cairo  , fontSize: FontSize.size18 , color: TColors.secondary),
                   ),
                 ],

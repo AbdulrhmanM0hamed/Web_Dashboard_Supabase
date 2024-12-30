@@ -261,7 +261,7 @@ class _EditProductViewState extends State<EditProductView> {
                     decoration: const InputDecoration(
                       labelText: 'السعر',
                       border: OutlineInputBorder(),
-                      suffixText: 'جنيه مصري',
+                      suffixText: 'ريال',
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {

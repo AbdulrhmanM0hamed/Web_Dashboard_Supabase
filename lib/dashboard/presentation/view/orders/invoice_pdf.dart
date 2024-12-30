@@ -179,7 +179,7 @@ class InvoicePDF {
                           ),
                           pw.Expanded(
                             child: pw.Text(
-                              '${item.quantity * item.price} جنيه',
+                              '${item.quantity * item.price} ريال',
                               textAlign: pw.TextAlign.left,
                               style:
                                   pw.TextStyle(font: arabicFont, fontSize: 8),
@@ -209,7 +209,7 @@ class InvoicePDF {
                       ),
                     ),
                     pw.Text(
-                      '${order.totalAmount} جنيه',
+                      '${order.totalAmount} ريال',
                       style: pw.TextStyle(
                         font: arabicBoldFont,
                         fontSize: 14,
