@@ -71,6 +71,10 @@ class ProductsCubit extends Cubit<ProductsState> {
             'has_discount': product.hasDiscount,
             'discount_percentage': product.discountPercentage,
             'discount_price': product.discountPrice,
+            'is_organic': product.isOrganic,
+            'calories_per_100g': product.caloriesPer100g,
+            'expiry_name': product.expiryName,
+            'weight': product.weight,
           })
           .eq('id', id);
       
