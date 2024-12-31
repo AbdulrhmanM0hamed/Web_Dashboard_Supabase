@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pdf/pdf.dart';
 import 'package:supabase_dashboard/core/constants/colors.dart';
 import 'package:supabase_dashboard/core/constants/font_manger.dart';
 import 'package:supabase_dashboard/core/constants/styles_manger.dart';
@@ -9,8 +8,7 @@ import 'package:supabase_dashboard/dashboard/presentation/view/orders/widgets/or
 import 'package:supabase_dashboard/dashboard/presentation/view/orders/widgets/show_order_Details.dart';
 import '../../view_model/orders/orders_cubit.dart';
 import '../../../data/models/order_model.dart';
-import 'package:printing/printing.dart';
-import 'invoice_pdf.dart';
+
 
 class OrdersView extends StatefulWidget {
   const OrdersView({super.key});
